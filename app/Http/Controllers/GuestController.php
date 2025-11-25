@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guest;
+use App\Models\Wish;
 use Illuminate\Http\Request;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
@@ -10,12 +11,19 @@ class GuestController extends Controller
 {
     public function show($code)
     {
+        // Cari guest berdasarkan code
         $guest = Guest::where('code', $code)->firstOrFail();
         
         // Generate QR Code
-        $qrCode = QrCode::size(300)->generate(route('guest.show', $code));
+        $qrCode = QrCode::size(200)->generate(route('guest.show', $code));
         
-        return view('invitation', compact('guest', 'qrCode'));
+        // Ambil semua wishes yang sudah diapprove
+        $wishes = Wish::where('is_approved', true)
+                      ->latest()
+                      ->take(10)
+                      ->get();
+        
+        return view('invitation', compact('guest', 'qrCode', 'wishes'));
     }
 
     public function showQr($code)
