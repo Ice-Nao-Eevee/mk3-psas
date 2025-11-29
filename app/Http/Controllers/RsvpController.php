@@ -17,14 +17,13 @@ class RsvpController extends Controller
             'message' => 'nullable|string|max:500'
         ]);
 
-        $rsvp = Rsvp::updateOrCreate(
-            ['guest_id' => $request->guest_id],
-            [
-                'attendance' => $request->attendance,
-                'total_guests' => $request->total_guests,
-                'message' => $request->message
-            ]
-        );
+        // Create new RSVP every time
+        $rsvp = Rsvp::create([
+            'guest_id' => $request->guest_id,
+            'attendance' => $request->attendance,
+            'total_guests' => $request->total_guests,
+            'message' => $request->message
+        ]);
 
         return response()->json([
             'success' => true,

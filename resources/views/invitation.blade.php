@@ -688,38 +688,112 @@
 
     <!-- RSVP Section -->
     <section class="rsvp" id="rsvp">
-        <div class="container">
-            <h2 class="text-center fade-in">We Hope You Can Join Us</h2>
-            <div class="rsvp-form card fade-in">
-                <div id="rsvpAlert" class="alert"></div>
-                <form id="weddingRsvp">
-                    <input type="hidden" id="guestId" value="{{ $guest->id }}">
-                    
-                    <div class="form-group">
-                        <label>Will you be attending? *</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="attendingYes" name="attendance" value="attending" required>
-                                <label for="attendingYes">Yes, I'll be there!</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="attendingNo" name="attendance" value="not_attending">
-                                <label for="attendingNo">Sorry, I can't make it</label>
-                            </div>
+    <div class="container" style="position: relative;">
+        <h2 class="text-center fade-in">We Hope You Can Join Us</h2>
+        <div class="rsvp-form card fade-in">
+            <div id="rsvpAlert" class="alert"></div>
+            <form id="weddingRsvp">
+                <input type="hidden" id="guestId" value="{{ $guest->id }}">
+                
+                <div class="form-group">
+                    <label>Will you be attending? *</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="attendingYes" name="attendance" value="attending" required>
+                            <label for="attendingYes">Yes, I'll be there!</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="attendingNo" name="attendance" value="not_attending">
+                            <label for="attendingNo">Sorry, I can't make it</label>
                         </div>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="totalGuests">Number of Guests (max: {{ $guest->quota }}) *</label>
-                        <input type="number" id="totalGuests" class="form-control" min="1" max="{{ $guest->quota }}" value="1" required>
-                    </div>
+                <div class="form-group">
+                    <label for="totalGuests">Number of Guests (max: {{ $guest->quota }}) *</label>
+                    <input type="number" id="totalGuests" class="form-control" min="1" max="{{ $guest->quota }}" value="1" required>
+                </div>
 
-                    <div class="form-group">
-                        <label for="message">Message for the Couple</label>
-                        <textarea id="message" class="form-control" placeholder="Share your well wishes"></textarea>
-                    </div>
+                <div class="form-group">
+                    <label for="message">Message for the Couple</label>
+                    <textarea id="message" class="form-control" placeholder="Share your well wishes"></textarea>
+                </div>
 
-                    <button type="submit" class="btn" style="width: 100%;">Submit RSVP</button>
+                <button type="submit" class="btn" style="width: 100%;">Submit RSVP</button>
+            </form>
+        </div>
+        <!-- Bubble Chat Container di samping form -->
+        <div id="bubbleContainer"></div>
+    </div>
+</section>
+
+<style>
+    /* Container bubble di samping form */
+    #bubbleContainer {
+        position: absolute;
+        top: 50px;
+        right: 0;
+        width: 220px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        pointer-events: none;
+    }
+
+    .bubble {
+    background: linear-gradient(135deg, rgba(183,110,121,0.9), rgba(247,231,206,0.85));
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 24px;
+    font-size: 0.95rem;
+    max-width: 200px;
+    box-shadow: 0 4px 15px rgba(183,110,121,0.5), 0 0 8px rgba(255,255,255,0.4);
+    animation: floatUp 0.6s ease forwards, gentleWiggle 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
+    position: relative;
+    transform-origin: bottom center;
+}
+
+.bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    right: 12px;
+    width: 8px;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.7);
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(255,255,255,0.6);
+    animation: shimmer 2.5s infinite;
+}
+
+/* Floating animation */
+@keyframes floatUp {
+    0% { transform: translateY(10px) scale(0.9); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Gentle wiggle */
+@keyframes gentleWiggle {
+    0%,100% { transform: translateX(0) rotate(0deg); }
+    25% { transform: translateX(-1.5px) rotate(-0.5deg); }
+    50% { transform: translateX(1.5px) rotate(0.5deg); }
+    75% { transform: translateX(-1px) rotate(-0.3deg); }
+}
+
+/* Glow pulse */
+@keyframes glowPulse {
+    0%,100% { box-shadow: 0 4px 15px rgba(183,110,121,0.5), 0 0 8px rgba(255,255,255,0.4); }
+    50% { box-shadow: 0 6px 20px rgba(183,110,121,0.7), 0 0 12px rgba(255,255,255,0.6); }
+}
+
+/* Shimmer dot */
+@keyframes shimmer {
+    0% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+    50% { box-shadow: 0 0 14px rgba(255,255,255,0.8); }
+    100% { box-shadow: 0 0 6px rgba(255,255,255,0.4); }
+}
+</style>
+
                 </form>
             </div>
         </div>
@@ -829,51 +903,54 @@
             window.addEventListener('scroll', fadeInOnScroll);
 
             // RSVP Form
-            document.getElementById('weddingRsvp').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                
-                const guestId = document.getElementById('guestId').value;
-                const attendance = document.querySelector('input[name="attendance"]:checked').value;
-                const totalGuests = document.getElementById('totalGuests').value;
-                const message = document.getElementById('message').value;
+            const rsvpForm = document.getElementById('weddingRsvp');
+    const bubbleContainer = document.getElementById('bubbleContainer');
 
-                try {
-                    const response = await fetch('/rsvp', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify({
-                            guest_id: guestId,
-                            attendance: attendance,
-                            total_guests: totalGuests,
-                            message: message
-                        })
-                    });
+    rsvpForm.addEventListener('submit', async function(e){
+        e.preventDefault();
 
-                    const data = await response.json();
-                    
-                    const alert = document.getElementById('rsvpAlert');
-                    if (data.success) {
-                        alert.className = 'alert alert-success';
-                        alert.textContent = data.message;
-                        alert.style.display = 'block';
-                    } else {
-                        alert.className = 'alert alert-error';
-                        alert.textContent = 'Failed to submit RSVP';
-                        alert.style.display = 'block';
-                    }
+        const guestId = document.getElementById('guestId').value;
+        const attendance = document.querySelector('input[name="attendance"]:checked').value;
+        const totalGuests = document.getElementById('totalGuests').value;
+        const message = document.getElementById('message').value.trim();
+        if(!message) return;
 
-                    setTimeout(() => {
-                        alert.style.display = 'none';
-                    }, 5000);
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
-                }
+        try{
+            const res = await fetch('/rsvp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                    'X-CSRF-TOKEN': csrfToken
+                },
+                body: JSON.stringify({
+                    guest_id: guestId,
+                    attendance: attendance,
+                    total_guests: totalGuests,
+                    message: message
+                })
             });
+
+            const data = await res.json();
+            if(data.success){
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                bubble.textContent = message;
+
+                // Random: kiri atau kanan tetap
+                bubble.style.alignSelf = Math.random() > 0.5 ? 'flex-start' : 'flex-end';
+
+                bubbleContainer.appendChild(bubble);
+
+                // Reset textarea
+                document.getElementById('message').value = '';
+            } else {
+                console.error('Failed to submit RSVP');
+            }
+
+        } catch(err){
+            console.error(err);
+        }
+    });
 
             // Wish Form
             document.getElementById('wishForm').addEventListener('submit', async function(e) {
