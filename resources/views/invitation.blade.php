@@ -714,44 +714,15 @@
                     <input type="number" id="totalGuests" class="form-control" min="1" max="{{ $guest->quota }}" value="1" required>
                 </div>
 
-                <div class="form-group">
-                    <label for="message">Message for the Couple</label>
-                    <textarea id="message" class="form-control" placeholder="Share your well wishes"></textarea>
-                </div>
+                
 
                 <button type="submit" class="btn" style="width: 100%;">Submit RSVP</button>
             </form>
         </div>
-        <!-- Bubble Chat Container di samping form -->
-        <div id="bubbleContainer"></div>
     </div>
 </section>
 
 <style>
-    /* Container bubble di samping form */
-    #bubbleContainer {
-        position: absolute;
-        top: 50px;
-        right: 0;
-        width: 220px;
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        pointer-events: none;
-    }
-
-    .bubble {
-    background: linear-gradient(135deg, rgba(183,110,121,0.9), rgba(247,231,206,0.85));
-    color: #fff;
-    padding: 12px 18px;
-    border-radius: 24px;
-    font-size: 0.95rem;
-    max-width: 200px;
-    box-shadow: 0 4px 15px rgba(183,110,121,0.5), 0 0 8px rgba(255,255,255,0.4);
-    animation: floatUp 0.6s ease forwards, gentleWiggle 3s ease-in-out infinite, glowPulse 2s ease-in-out infinite;
-    position: relative;
-    transform-origin: bottom center;
-}
 
 .bubble::after {
     content: '';
@@ -872,136 +843,168 @@
     </footer>
 
     <script>
-        // Get CSRF token
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    // Get CSRF token
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            if (window.scrollY > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-        });
-
-        // Fade in animation
-        document.addEventListener('DOMContentLoaded', function() {
-            const fadeElements = document.querySelectorAll('.fade-in');
-
-            const fadeInOnScroll = function() {
-                fadeElements.forEach(element => {
-                    const elementTop = element.getBoundingClientRect().top;
-                    const elementVisible = 150;
-                    if (elementTop < window.innerHeight - elementVisible) {
-                        element.classList.add('visible');
-                    }
-                });
-            };
-
-            fadeInOnScroll();
-            window.addEventListener('scroll', fadeInOnScroll);
-
-            // RSVP Form
-            const rsvpForm = document.getElementById('weddingRsvp');
-    const bubbleContainer = document.getElementById('bubbleContainer');
-
-    rsvpForm.addEventListener('submit', async function(e){
-        e.preventDefault();
-
-        const guestId = document.getElementById('guestId').value;
-        const attendance = document.querySelector('input[name="attendance"]:checked').value;
-        const totalGuests = document.getElementById('totalGuests').value;
-        const message = document.getElementById('message').value.trim();
-        if(!message) return;
-
-        try{
-            const res = await fetch('/rsvp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type':'application/json',
-                    'X-CSRF-TOKEN': csrfToken
-                },
-                body: JSON.stringify({
-                    guest_id: guestId,
-                    attendance: attendance,
-                    total_guests: totalGuests,
-                    message: message
-                })
-            });
-
-            const data = await res.json();
-            if(data.success){
-                const bubble = document.createElement('div');
-                bubble.className = 'bubble';
-                bubble.textContent = message;
-
-                // Random: kiri atau kanan tetap
-                bubble.style.alignSelf = Math.random() > 0.5 ? 'flex-start' : 'flex-end';
-
-                bubbleContainer.appendChild(bubble);
-
-                // Reset textarea
-                document.getElementById('message').value = '';
-            } else {
-                console.error('Failed to submit RSVP');
-            }
-
-        } catch(err){
-            console.error(err);
+    // Header scroll effect
+    window.addEventListener('scroll', function() {
+        const header = document.getElementById('header');
+        if (window.scrollY > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
         }
     });
 
-            // Wish Form
-            document.getElementById('wishForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
+    // Fade in animation on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        const fadeElements = document.querySelectorAll('.fade-in');
 
-                const name = document.getElementById('wishName').value;
-                const message = document.getElementById('wishMessage').value;
-
-                try {
-                    const response = await fetch('/wishes', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': csrfToken
-                        },
-                        body: JSON.stringify({
-                            name: name,
-                            message: message
-                        })
-                    });
-
-                    const data = await response.json();
-
-                    if (data.success) {
-                        const wishesList = document.getElementById('wishesList');
-                        const newWish = document.createElement('div');
-                        newWish.className = 'wish-item fade-in visible';
-                        newWish.innerHTML = `
-                            <div class="wish-author">${name}</div>
-                            <div class="wish-message">${message}</div>
-                        `;
-                        wishesList.prepend(newWish);
-
-                        document.getElementById('wishForm').reset();
-                        document.getElementById('wishName').value = '{{ $guest->name }}';
-
-                        const alert = document.getElementById('wishAlert');
-                        alert.className = 'alert alert-success';
-                        alert.textContent = data.message;
-                        alert.style.display = 'block';
-
-                        setTimeout(() => {
-                            alert.style.display = 'none';
-                        }, 5000);
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
-                    alert('An error occurred. Please try again.');
+        const fadeInOnScroll = function() {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
                 }
             });
+        };
+
+        // Initial check
+        fadeInOnScroll();
+
+        // Check on scroll
+        window.addEventListener('scroll', fadeInOnScroll);
+
+        // Mobile menu toggle (optional, if you want to add mobile menu functionality)
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (mobileMenu && navLinks) {
+            mobileMenu.addEventListener('click', function() {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+            });
+        }
+
+        // RSVP Form Submission
+        document.getElementById('weddingRsvp').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const guestId = document.getElementById('guestId').value;
+            const attendance = document.querySelector('input[name="attendance"]:checked');
+            const totalGuests = document.getElementById('totalGuests').value;
+            
+            // Validasi attendance
+            if (!attendance) {
+                alert('Please select attendance option');
+                return;
+            }
+
+            try {
+                const response = await fetch('/rsvp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        guest_id: guestId,
+                        attendance: attendance.value,
+                        total_guests: totalGuests
+                    })
+                });
+
+                const data = await response.json();
+                
+                const alertBox = document.getElementById('rsvpAlert');
+                if (data.success) {
+                    alertBox.className = 'alert alert-success';
+                    alertBox.textContent = data.message;
+                    alertBox.style.display = 'block';
+                    
+                    // Optional: Scroll to alert
+                    alertBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                } else {
+                    alertBox.className = 'alert alert-error';
+                    alertBox.textContent = 'Failed to submit RSVP. Please try again.';
+                    alertBox.style.display = 'block';
+                }
+
+                // Auto hide alert after 5 seconds
+                setTimeout(() => {
+                    alertBox.style.display = 'none';
+                }, 5000);
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
         });
-    </script>
+
+        // Wish Form Submission
+        document.getElementById('wishForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('wishName').value;
+            const message = document.getElementById('wishMessage').value;
+
+            try {
+                const response = await fetch('/wishes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Add new wish to the list
+                    const wishesList = document.getElementById('wishesList');
+                    const newWish = document.createElement('div');
+                    newWish.className = 'wish-item fade-in visible';
+                    newWish.innerHTML = `
+                        <div class="wish-author">${name}</div>
+                        <div class="wish-message">${message}</div>
+                    `;
+                    wishesList.prepend(newWish);
+
+                    // Reset form
+                    document.getElementById('wishForm').reset();
+                    document.getElementById('wishName').value = '{{ $guest->name }}';
+
+                    // Show success alert
+                    const alertBox = document.getElementById('wishAlert');
+                    alertBox.className = 'alert alert-success';
+                    alertBox.textContent = data.message;
+                    alertBox.style.display = 'block';
+
+                    // Auto hide alert after 5 seconds
+                    setTimeout(() => {
+                        alertBox.style.display = 'none';
+                    }, 5000);
+                } else {
+                    // Show error alert
+                    const alertBox = document.getElementById('wishAlert');
+                    alertBox.className = 'alert alert-error';
+                    alertBox.textContent = 'Failed to submit wish. Please try again.';
+                    alertBox.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        alertBox.style.display = 'none';
+                    }, 5000);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+</script>
 </body>
 </html>
