@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>Fabian & Naifa | Wedding Celebration</title>
+    <title>Fabian Rozan Fanani & Naifa Ashila Handoyo | Wedding Celebration</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -627,7 +627,7 @@
             <div class="hero-content fade-in">
                 <h1>We're Getting <span>Married</span></h1>
                 <p class="guest-name">Dear {{ $guest->name }}</p>
-                <p>Fabian & Naifa invite you to celebrate their special day. Join us for an unforgettable celebration of love, laughter, and new beginnings.</p>
+                <p>Fabian Rozan Fanani & Naifa Ashila Handoyo invite you to celebrate their special day. Join us for an unforgettable celebration of love, laughter, and new beginnings.</p>
                 <div class="hero-btns">
                     <a href="#about" class="btn">Open Invitation</a>
                     <a href="#rsvp" class="btn btn-outline">Send RSVP</a>
@@ -647,7 +647,7 @@
                     <p>As we stand on the brink of forever, we want you to be a part of our next chapter. Join us as we exchange vows and promise each other a lifetime of adventures.</p>
                 </div>
                 <div class="about-image fade-in">
-                    [Portrait of Fabian & Naifa]
+                    <img src="{{ asset('images/couple-photo.jpg') }}" alt="Fabian & Naifa" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
                 </div>
             </div>
         </div>
@@ -663,24 +663,24 @@
                         <i class="fas fa-map-marker-alt"></i>
                     </div>
                     <h3>Location</h3>
-                    <p>Garden View Estate</p>
-                    <p>Surrounded by natural beauty and elegant charm</p>
+                    <p>SMK Telkom Purwokerto</p>
+                    <p>Jl. DI Panjaitan No.128, Karangreja, Purwokerto Kidul, South Purwokerto District, Banyumas Regency, Central Java 53141</p>
                 </div>
                 <div class="card detail-card fade-in">
                     <div class="detail-icon">
                         <i class="far fa-calendar-alt"></i>
                     </div>
                     <h3>Date & Time</h3>
-                    <p>Saturday, June 15th, 2025</p>
-                    <p>Ceremony begins at 4:00 PM</p>
+                    <p>Monday, December 8th, 2025</p>
+                    <p>Ceremony begins at 7:30 - 9:00 AM</p>
                 </div>
                 <div class="card detail-card fade-in">
                     <div class="detail-icon">
                         <i class="fas fa-tshirt"></i>
                     </div>
                     <h3>Attire</h3>
-                    <p>Semi-formal</p>
-                    <p>Cocktail attire</p>
+                    <p>Traditional Formal Attire</p>
+                    <p>Surakarta/Solo Style</p>
                 </div>
             </div>
         </div>
