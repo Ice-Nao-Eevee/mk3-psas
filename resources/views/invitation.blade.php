@@ -811,7 +811,7 @@
         <div class="container">
             <div class="hero-content fade-in">
                 <h1>We're Getting <span>Married</span></h1>
-                <p class="guest-name">Dear Guest</p>
+                <p class="guest-name">Dear {{ $guest->name }}</p>
                 <p>Fabian Rozan Fanani & Naifa Ashila Handoyo invite you to celebrate their special day. Join us for an unforgettable celebration of love, laughter, and new beginnings.</p>
                 <div class="hero-btns">
                     <a href="#about" class="btn">Open Invitation</a>
@@ -937,30 +937,14 @@
             <h2 class="text-center fade-in">Your Digital Invitation</h2>
             <div class="qr-container fade-in">
                 <div class="qr-code">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="100" height="100" fill="white"/>
-                        <rect x="10" y="10" width="10" height="10" fill="black"/>
-                        <rect x="30" y="10" width="10" height="10" fill="black"/>
-                        <rect x="50" y="10" width="10" height="10" fill="black"/>
-                        <rect x="70" y="10" width="10" height="10" fill="black"/>
-                        <rect x="10" y="30" width="10" height="10" fill="black"/>
-                        <rect x="70" y="30" width="10" height="10" fill="black"/>
-                        <rect x="10" y="50" width="10" height="10" fill="black"/>
-                        <rect x="30" y="50" width="10" height="10" fill="black"/>
-                        <rect x="50" y="50" width="10" height="10" fill="black"/>
-                        <rect x="70" y="50" width="10" height="10" fill="black"/>
-                        <rect x="10" y="70" width="10" height="10" fill="black"/>
-                        <rect x="30" y="70" width="10" height="10" fill="black"/>
-                        <rect x="50" y="70" width="10" height="10" fill="black"/>
-                        <rect x="70" y="70" width="10" height="10" fill="black"/>
-                    </svg>
+                    {!! $qrCode !!}
                 </div>
                 <div class="qr-actions">
                     <p>Your personal QR code for event check-in. Please present this code upon arrival.</p>
-                    <p><strong>Guest Code:</strong> DEMO123</p>
-                    <button class="btn" style="margin-top: 1rem;">
-                        <i class="fas fa-expand"></i> View Full QR Code
-                    </button>
+                    <p><strong>Guest Code:</strong> {{ $guest->code }}</p>
+                    <a href="/qr/{{ $guest->code }}" class="btn" style="margin-top: 1rem;">
+                    <i class="fas fa-expand"></i> View Full QR Code
+                    </a>
                 </div>
             </div>
         </div>

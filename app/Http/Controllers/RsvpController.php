@@ -6,6 +6,7 @@ use App\Models\Rsvp;
 use App\Models\Guest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use App\Mail\RSVPConfirmation;
 
 class RsvpController extends Controller
@@ -49,7 +50,7 @@ class RsvpController extends Controller
             try {
     // proses RSVP & kirim email
             } catch (\Exception $e) {
-                \Log::error('RSVP Error: ' . $e->getMessage());
+                Log::error('RSVP Error: ' . $e->getMessage());
                 return back()->with('error', $e->getMessage());
             }
         }

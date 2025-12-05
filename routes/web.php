@@ -5,8 +5,9 @@ use App\Http\Controllers\GuestController;
 use App\Http\Controllers\RsvpController;
 use App\Http\Controllers\WishController;
 use App\Http\Controllers\CheckinController;
+use App\Http\Controllers\DashboardController;
 
-// Welcome page
+// Welcome page - Auto redirect ke contoh undangan
 Route::get('/', function () {
     return redirect('/invitation/ABC123');
 });
@@ -26,6 +27,5 @@ Route::post('/wishes', [WishController::class, 'store'])->name('wishes.store');
 Route::get('/checkin/scanner', [CheckinController::class, 'scanPage'])->name('checkin.scanner');
 Route::get('/checkin/{code}', [CheckinController::class, 'scan'])->name('checkin.scan');
 
-Route::get('/admin/dashboard', [App\Http\Controllers\DashboardController::class, 'index'])->name('dashboard');
-
-Route::post('/message', [MessageController::class, 'store']);
+// Admin Dashboard
+Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('dashboard');
