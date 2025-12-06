@@ -48,7 +48,8 @@ class RsvpController extends Controller
         // KIRIM EMAIL KONFIRMASI (hanya jika attending)
         if ($request->attendance === 'attending') {
             try {
-    // proses RSVP & kirim email
+                // proses RSVP & kirim email
+                Mail::to($request->email)->send(new RSVPConfirmation($guest, $rsvp));
             } catch (\Exception $e) {
                 Log::error('RSVP Error: ' . $e->getMessage());
                 return back()->with('error', $e->getMessage());
