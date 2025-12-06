@@ -64,3 +64,11 @@ Lalu copy kode dibawah ini, paste di terminal (manapun) dan isi sesuai informasi
     'code' => strtoupper(\Illuminate\Support\Str::random(6)),  // ← Otomatis!
     'quota' => (jumlah orang yang datang)
 ]);
+
+\App\Models\Guest::create([
+    'name' => 'Naovee',
+    'email' => 'banyubirudemas@gmail.com',
+    'phone' => '082138065864',
+    'code' => strtoupper(\Illuminate\Support\Str::random(6)),  // ← Otomatis!
+    'quota' => 1
+]);
