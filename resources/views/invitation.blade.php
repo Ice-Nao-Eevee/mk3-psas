@@ -831,7 +831,7 @@
                     <p>As we stand on the brink of forever, we want you to be a part of our next chapter. Join us as we exchange vows and promise each other a lifetime of adventures.</p>
                 </div>
                 <div class="about-image fade-in">
-                    <img src="https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=800" alt="Fabian & Naifa">
+                    <img src="{{ asset('images/FN.png') }}" alt="Fabian & Haifa" class="img-fluid">
                 </div>
             </div>
         </div>
